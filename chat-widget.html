@@ -1,0 +1,328 @@
+
+<style>
+  #rs-chat-launcher {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    z-index: 999999;
+    border: 0;
+    border-radius: 999px;
+    width: 66px;
+    height: 66px;
+    background: linear-gradient(135deg, #0878e8, #08b9c8);
+    color: white;
+    box-shadow: 0 8px 28px #063b7540;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    transition: transform .2s ease;
+  }
+
+  #rs-chat-launcher:hover {
+    transform: translateY(-3px);
+  }
+
+  #rs-chat-launcher svg {
+    width: 30px;
+    height: 30px;
+  }
+
+  #rs-chat-panel {
+    position: fixed;
+    right: 24px;
+    bottom: 104px;
+    z-index: 999999;
+    width: 370px;
+    max-width: calc(100vw - 32px);
+    height: 520px;
+    max-height: calc(100dvh - 130px);
+    background: #fff;
+    border: 1px solid #e3edf7;
+    border-radius: 22px;
+    box-shadow: 0 18px 60px #12365c30;
+    overflow: hidden;
+    display: none;
+    flex-direction: column;
+    font-family: Inter, Arial, sans-serif;
+    color: #16324f;
+  }
+
+  #rs-chat-panel.rs-open {
+    display: flex;
+    animation: rs-appear .2s ease-out;
+  }
+
+  @keyframes rs-appear {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  #rs-chat-header {
+    padding: 19px 18px;
+    background: linear-gradient(120deg, #086bd7, #087fe9);
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .rs-avatar {
+    width: 42px;
+    height: 42px;
+    flex: 0 0 42px;
+    border-radius: 14px;
+    background: #ffffff24;
+    display: grid;
+    place-items: center;
+    font-size: 22px;
+  }
+
+  .rs-heading {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .rs-heading strong {
+    display: block;
+    font-size: 16px;
+    line-height: 1.4;
+  }
+
+  .rs-heading span {
+    display: block;
+    margin-top: 3px;
+    font-size: 12px;
+    color: #e0f5ff;
+  }
+
+  #rs-chat-close {
+    border: 0;
+    color: white;
+    background: transparent;
+    font-size: 25px;
+    cursor: pointer;
+    padding: 4px 8px;
+  }
+
+  #rs-chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 16px;
+    background: #f7faff;
+  }
+
+  .rs-message {
+    font-size: 14px;
+    line-height: 1.55;
+    padding: 12px 14px;
+    border-radius: 15px;
+    max-width: 92%;
+    margin-bottom: 12px;
+    overflow-wrap: anywhere;
+  }
+
+  .rs-bot-message {
+    background: white;
+    border: 1px solid #e4edf6;
+    border-top-left-radius: 5px;
+  }
+
+  .rs-user-message {
+    background: #0878e8;
+    color: white;
+    margin-left: auto;
+    border-top-right-radius: 5px;
+  }
+
+  #rs-chat-topics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 14px;
+  }
+
+  .rs-topic {
+    border: 1px solid #b9dafa;
+    border-radius: 20px;
+    background: white;
+    color: #086bd7;
+    padding: 9px 12px;
+    font-size: 12px;
+    cursor: pointer;
+  }
+
+  .rs-topic:hover {
+    background: #eaf5ff;
+  }
+
+  #rs-chat-form {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 13px;
+    border-top: 1px solid #e7eef6;
+    background: white;
+  }
+
+  #rs-chat-input {
+    flex: 1;
+    min-width: 0;
+    border: 1px solid #dce6f1;
+    background: #f8fbff;
+    border-radius: 14px;
+    padding: 12px;
+    outline: none;
+    color: #16324f;
+    font: inherit;
+    font-size: 13px;
+  }
+
+  #rs-chat-input:focus {
+    border-color: #1686e8;
+  }
+
+  #rs-chat-send {
+    width: 43px;
+    height: 43px;
+    flex: 0 0 43px;
+    border: 0;
+    border-radius: 13px;
+    background: #08aebd;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+  }
+
+  #rs-chat-note {
+    font-size: 10px;
+    color: #8292a6;
+    text-align: center;
+    padding: 0 8px 10px;
+    background: white;
+  }
+
+  @media (max-width: 480px) {
+    #rs-chat-launcher {
+      right: 16px;
+      bottom: 16px;
+      width: 60px;
+      height: 60px;
+    }
+
+    #rs-chat-panel {
+      right: 10px;
+      bottom: 86px;
+      width: calc(100vw - 20px);
+      max-width: none;
+      height: min(520px, calc(100dvh - 108px));
+    }
+  }
+</style>
+
+<button id="rs-chat-launcher" type="button"
+  aria-label="Abrir asistente laboral" aria-expanded="false">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+    aria-hidden="true">
+    <path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8A8.5 8.5 0 0 1 12.5 3h.5a8.5 8.5 0 0 1 8 8v.5Z"/>
+  </svg>
+</button>
+
+<section id="rs-chat-panel" aria-label="Asistente laboral de RedSindical"
+  aria-hidden="true">
+  <header id="rs-chat-header">
+    <div class="rs-avatar">⚖️</div>
+    <div class="rs-heading">
+      <strong>Asistente laboral</strong>
+      <span>RedSindical · Orientación laboral</span>
+    </div>
+    <button id="rs-chat-close" type="button"
+      aria-label="Cerrar chat">×</button>
+  </header>
+
+  <div id="rs-chat-messages" aria-live="polite">
+    <div class="rs-message rs-bot-message">
+      ¡Hola! 👋 Bienvenido a RedSindical. Puedo orientarte sobre tus
+      derechos laborales y ayudarte a localizar información oficial.
+      ¿Qué te gustaría consultar?
+    </div>
+    <div id="rs-chat-topics">
+      <button class="rs-topic" type="button">🏖️ Vacaciones</button>
+      <button class="rs-topic" type="button">🎁 Aguinaldo</button>
+      <button class="rs-topic" type="button">📄 Despido</button>
+      <button class="rs-topic" type="button">💰 Salario</button>
+    </div>
+  </div>
+
+  <form id="rs-chat-form">
+    <input id="rs-chat-input" type="text"
+      placeholder="Escribe tu pregunta..." autocomplete="off"
+      aria-label="Escribe tu pregunta">
+    <button id="rs-chat-send" type="submit"
+      aria-label="Enviar mensaje">➤</button>
+  </form>
+  <div id="rs-chat-note">
+    Orientación informativa. Consulta las fuentes oficiales para confirmar.
+  </div>
+</section>
+
+<script>
+(function () {
+  const launcher = document.getElementById("rs-chat-launcher");
+  const panel = document.getElementById("rs-chat-panel");
+  const close = document.getElementById("rs-chat-close");
+  const messages = document.getElementById("rs-chat-messages");
+  const topics = document.getElementById("rs-chat-topics");
+  const form = document.getElementById("rs-chat-form");
+  const input = document.getElementById("rs-chat-input");
+
+  if (!launcher || !panel || !close || !messages || !topics || !form || !input) {
+    return;
+  }
+
+  function setOpen(open) {
+    panel.classList.toggle("rs-open", open);
+    panel.setAttribute("aria-hidden", String(!open));
+    launcher.setAttribute("aria-expanded", String(open));
+    if (open) input.focus();
+  }
+
+  function addMessage(text, type) {
+    const item = document.createElement("div");
+    item.className = "rs-message " +
+      (type === "user" ? "rs-user-message" : "rs-bot-message");
+    item.textContent = text;
+    messages.appendChild(item);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  launcher.addEventListener("click", function () {
+    setOpen(!panel.classList.contains("rs-open"));
+  });
+
+  close.addEventListener("click", function () {
+    setOpen(false);
+  });
+
+  topics.addEventListener("click", function (event) {
+    const button = event.target.closest(".rs-topic");
+    if (!button) return;
+    input.value = button.textContent.replace(/^[^\wÁÉÍÓÚÜÑ]+/u, "").trim();
+    input.focus();
+  });
+
+  form.addEventListener("submit", function (event) {
+    event.preventDefault();
+    const question = input.value.trim();
+    if (!question) return;
+
+    addMessage(question, "user");
+    input.value = "";
+
+    addMessage(
+      "Gracias por tu pregunta. Estamos preparando la conexión con el asistente laboral para darte una orientación basada en fuentes oficiales. Por ahora, puedes consultar PROFEDET en https://www.profedet.gob.mx/",
+      "bot"
+    );
+  });
+})();
+</script>
